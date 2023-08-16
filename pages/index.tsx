@@ -122,8 +122,7 @@ export default function Home() {
             <option>AES-128-CFB</option>
             <option>AES-128-ECB</option>
             <option>AES-128-OFB</option>
-            <option>DES-EDE-CBC</option>
-            <option>DES-EDE3-CFB</option>
+            <option value="AES-128-CBC">DES-EDE-CBC</option>
             <option value="RSA">RSA</option>
             <option value="DH">Hill Cipher</option>
             <option value="Substitution">Substitution</option>
