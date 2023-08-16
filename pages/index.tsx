@@ -125,7 +125,7 @@ export default function Home() {
             <option>DES-EDE-CBC</option>
             <option>DES-EDE3-CFB</option>
             <option value="RSA">RSA</option>
-            <option value="DH">DH</option>
+            <option value="DH">Hill Cipher</option>
             <option value="Substitution">Substitution</option>
             <option value="Elgamal">Elgamal</option>
           </select>
