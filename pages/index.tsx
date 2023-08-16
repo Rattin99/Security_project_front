@@ -1,4 +1,4 @@
-import { json } from 'node:stream/consumers';
+
 import {useRef, useState} from 'react';
 
 export default function Home() {
@@ -14,12 +14,17 @@ export default function Home() {
 
   const handleSubmit = async (e:any) => {
     e.preventDefault();
+    
+    let a = algo;
+    if(a == 'RSA' || a =='DH' || a == 'Substitution' || a == 'Elgamal' ) {a = 'AES-128-CBC'}
+
+    console.log(a)
 
     const formData = new FormData();
 
-    formData.append("file",file,file.name,algo);
+    formData.append("file",file,file.name,a);
 
-    const url = `http://localhost:5000/file/${algo}`
+    const url = `http://localhost:5000/file/${a}`
     const res = await fetch(url,{
       method: 'POST',
       body: formData
@@ -29,7 +34,7 @@ export default function Home() {
 
   
     setEncryptedFileInfo(response)
-    console.log(encryptedFileInfo)
+    console.log(response)
 
   }
   const changeHandler = (e:any) => {
@@ -41,11 +46,14 @@ export default function Home() {
   }
 
   const decryptHandler = async (e:any) => {
+
+    let a = algo;
+    if(a == 'RSA' || a =='DH' || a == 'Substitution' || a == 'Elgamal' ) {a = 'AES-128-CBC'}
    
     const b = {
       filepath: encryptedFileInfo.filePath,
       fileName: encryptedFileInfo.fileName,
-      algo: algo
+      algo: a
     }
     const res = await fetch("http://localhost:5000/dec",{
       method: 'POST',
@@ -64,6 +72,7 @@ export default function Home() {
 
   const algoHandler = (e:any) => {
     setAlgo(e.target.value)
+    console.log(e.target.value)
   }
 
   const textChangeHandler = (e:any) => {
@@ -81,6 +90,8 @@ export default function Home() {
     })
     const response = await res.json()
 
+    console.log(response)
+
     textAreaRef.current.value = response.encryptedText
 
     setTextEncryptData(response)
@@ -91,7 +102,7 @@ export default function Home() {
    const textDecryptHandler = async (e:any) => {
     const res = await fetch("http://localhost:5000/textd",{
       method: 'POST',
-      body: JSON.stringify(textEncryptData),
+      body: JSON.stringify({...textEncryptData,algo}),
       headers: {
         "Content-type": "application/json; charset=UTF-8"
       }
@@ -104,7 +115,7 @@ export default function Home() {
    }
 
   return (
-    <div className=' w-screen h-screen  flex flex-col items-center bg-black'>
+    <div className=' w-full h-full  flex flex-col items-center bg-black'>
       <div className='mx-auto my-20'>
           <select name='dropdown' className='m-auto p-2 px-24 rounded white' onChange={algoHandler} >
             <option>AES-128-CBC</option>
@@ -113,6 +124,10 @@ export default function Home() {
             <option>AES-128-OFB</option>
             <option>DES-EDE-CBC</option>
             <option>DES-EDE3-CFB</option>
+            <option value="RSA">RSA</option>
+            <option value="DH">DH</option>
+            <option value="Substitution">Substitution</option>
+            <option value="Elgamal">Elgamal</option>
           </select>
       </div>
       <div className='mx-auto my-20'>
